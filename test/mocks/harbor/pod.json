@@ -1,0 +1,106 @@
+{
+  "kind": "PodList",
+  "apiVersion": "v1",
+  "metadata": {
+    "selfLink": "/api/v1/namespaces/foobar-app-dev/pods",
+    "resourceVersion": "247918318"
+  },
+  "items": [
+    {
+      "metadata": {},
+      "spec": {},
+      "status": {
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2016-07-27T15:16:34Z"
+          }
+        ],
+        "hostIP": "172.0.0.1",
+        "podIP": "172.10.70.108",
+        "startTime": "2016-07-27T15:16:20Z",
+        "containerStatuses": [
+          {
+            "name": "hello-world",
+            "state": {
+              "running": {
+                "startedAt": "2016-07-27T15:16:34Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.services.example.com/hello-world:1.7.3",
+            "imageID": "docker://dd1732d8b71ee9abaa968d27608c5d6b7d3f092bd1f872c0342c198158170a87",
+            "containerID": "docker://d92a1"
+          },
+          {
+            "name": "foobar",
+            "state": {
+              "running": {
+                "startedAt": "2016-07-27T15:16:34Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.services.example.com/foobar:2.0.1",
+            "imageID": "docker://dd1732d8b71ee9abaa968d27608c5d6b7d3f092bd1f872c0342c198158170a87",
+            "containerID": "docker://d69a1"
+          }
+        ]
+      }
+    },
+    {
+      "metadata": {},
+      "spec": {},
+      "status": {
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2016-07-27T15:16:34Z"
+          }
+        ],
+        "hostIP": "172.0.0.2",
+        "podIP": "172.10.70.108",
+        "startTime": "2016-07-27T15:16:20Z",
+        "containerStatuses": [
+          {
+            "name": "hello-world",
+            "state": {
+              "running": {
+                "startedAt": "2016-07-27T15:16:34Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.services.example.com/hello-world:1.7.3",
+            "imageID": "docker://dd1732d8b71ee9abaa968d27608c5d6b7d3f092bd1f872c0342c198158170a87",
+            "containerID": "docker://d92a2"
+          },
+          {
+            "name": "foobar",
+            "state": {
+              "running": {
+                "startedAt": "2016-07-27T15:16:34Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.services.example.com/foobar:2.0.1",
+            "imageID": "docker://dd1732d8b71ee9abaa968d27608c5d6b7d3f092bd1f872c0342c198158170a87",
+            "containerID": "docker://d69a2"
+          }
+        ]
+      }
+    }
+  ]
+}
