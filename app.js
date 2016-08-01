@@ -46,21 +46,6 @@ app.get('/harbor/:barge/:shipment/:environment',
     containers.getLogs
 );
 
-/* /cadvisor/api/:host/:container
-*/
-
-/* /cadvisor/api/:host
-*/
-
-/* /cadvisor/:barge/:shipment/:environment
-*/
-
-/* /cadvisor/:barge/all
-*/
-
-/* /cadvisor/:barge
-*/
-
 let server = app.listen(port, () => {
     debug('listening on %s', port)
 });
