@@ -1,0 +1,150 @@
+
+{
+  "kind": "PodList",
+  "apiVersion": "v1",
+  "metadata": {
+    "selfLink": "/api/v1/namespaces/hello-world-app-dev/pods",
+    "resourceVersion": "247918318"
+  },
+  "items": [
+    {
+      "metadata": {
+        "name": "rc12345-mmekv",
+        "generateName": "rc12345-",
+        "namespace": "hello-world-app-dev",
+        "selfLink": "/api/v1/namespaces/hello-world-app-dev/pods/rc12345-mmekv",
+        "uid": "1282f9cb-540d-11e6-919c-0e858d9df4bb",
+        "resourceVersion": "247828885",
+        "creationTimestamp": "2016-07-27T15:16:20Z",
+        "labels": {
+          "environment": "dev",
+          "name": "hello-world-app",
+          "version": "1469632580230549201"
+        },
+        "annotations": {
+          "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicationController\",\"namespace\":\"hello-world-app-dev\",\"name\":\"rc12345\",\"uid\":\"1281673e-540d-11e6-919c-0e858d9df4bb\",\"apiVersion\":\"v1\",\"resourceVersion\":\"247828726\"}}\n"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "hello-world",
+            "image": "registry.services.example.com/hello-world:1.7.3",
+            "ports": [
+              {
+                "containerPort": 80,
+                "protocol": "TCP"
+              }
+            ],
+            "env": [
+              {
+                "name": "PATH",
+                "value": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+              },
+              {
+                "name": "PRODTOP",
+                "value": "/opt"
+              },
+              {
+                "name": "LOGTOP",
+                "value": "/var/logs"
+              },
+              {
+                "name": "CUSTOMER",
+                "value": "mss"
+              },
+              {
+                "name": "PRODUCT",
+                "value": "hello-world-app"
+              },
+              {
+                "name": "PROJECT",
+                "value": "harbor"
+              },
+              {
+                "name": "PROPERTY",
+                "value": "example.com"
+              },
+              {
+                "name": "BARGE",
+                "value": "mss"
+              },
+              {
+                "name": "LOCATION",
+                "value": "ec2"
+              },
+              {
+                "name": "HEALTHCHECK",
+                "value": "/_hc"
+              },
+              {
+                "name": "PROTOCOL",
+                "value": "http"
+              },
+              {
+                "name": "PORT",
+                "value": "80"
+              },
+              {
+                "name": "ENVIRONMENT",
+                "value": "dev"
+              }
+            ],
+            "resources": {},
+            "livenessProbe": {
+              "httpGet": {
+                "path": "/_",
+                "port": 80,
+                "scheme": "HTTP"
+              },
+              "initialDelaySeconds": 30,
+              "timeoutSeconds": 1,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "failureThreshold": 3
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "restartPolicy": "Always",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst",
+        "nodeName": "172.161.31.122",
+        "securityContext": {}
+      },
+      "status": {
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "False",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2016-07-28T12:31:16Z",
+            "reason": "ContainersNotReady",
+            "message": "containers with unready status: [hello-world]"
+          }
+        ],
+        "hostIP": "172.161.31.122",
+        "podIP": "172.10.70.108",
+        "startTime": "2016-07-27T15:16:20Z",
+        "containerStatuses": [
+          {
+            "name": "hello-world",
+            "state": {
+              "running": {
+                "startedAt": "2016-07-27T15:16:34Z"
+              }
+            },
+            "lastState": {},
+            "ready": true,
+            "restartCount": 0,
+            "image": "registry.services.example.com/hello-world:1.7.3",
+            "imageID": "docker://dd1732d8b71ee9abaa968d27608c5d6b7d3f092bd1f872c0342c198158170a87",
+            "containerID": "docker://d92a6499f10618e1c1dafd84ad8499c90d08265ceb4f9984f2bed1ece07ed407"
+          }
+        ]
+      }
+    }
+  ]
+}

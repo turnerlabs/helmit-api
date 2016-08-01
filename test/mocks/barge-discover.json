@@ -1,0 +1,35 @@
+[
+  {
+    "product": "example-barge-api",
+    "environment": "dev",
+    "recipes":[],
+    "config":{
+      "CHASSIS": "MOCK",
+      "PROJECT": "expansion",
+      "OWNER": "ictops",
+      "HEALTHCHECK": "/_healthcheck",
+      "RECIPE": "deployit",
+      "PORT": "5000",
+      "DATA_DISK": "/data",
+      "PACKAGE_SIZE": "2x4x32",
+      "CUSTOMER": "MSS",
+      "PROPERTY": "turner.com",
+      "PRODUCT": "example-barge-api",
+      "PRODTOP": "/opt",
+      "PROTOCOL": "http",
+			"USER": "www-data",
+			"LOCATION": "56m",
+			"LOGTOP": "/var/log",
+			"CONFTAG": "SHARED",
+			"SERIAL": "f00ff",
+			"RACK": "f00abc",
+			"ENVIRONMENT": "dev"
+    },
+    "host": "srd-101-0-0-1.nodes.56m",
+		"serial": "f00ff",
+		"ipaddress": "101.0.0.1",
+		"offline": null,
+    "mtime": "2016-07-19T20:26:07",
+		"ctime": "2014-03-17T21:04:40"
+  }
+]
