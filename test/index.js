@@ -52,6 +52,10 @@ describe('Harbor Endpoint', function () {
             .get(shipmentStatusPath.replace('$NAMESPACE', `${shipment}-${environment}`))
             .replyWithFile(200, getMockData('harbor/pod'));
 
+        nock(mssBargeApi)
+            .get(shipmentStatusPath.replace('$NAMESPACE', `missing-shipment-${environment}`))
+            .replyWithFile(200, getMockData('harbor/missing'));
+
         nock(host1)
             .get(containerPath.replace('$ID', 'd92a1'))
             .query({stdout: 1, stderr: 1, timestamps: 1, tail: 500})
@@ -92,6 +96,7 @@ describe('Harbor Endpoint', function () {
 
                 // replicas
                 expect(obj.replicas).to.have.length.of.at.least(1);
+                expect(obj.error).to.be.false;
                 obj.replicas.forEach(replica => {
                     reqReplicas.forEach(prop => expect(replica).to.have.property(prop))
 
@@ -104,6 +109,26 @@ describe('Harbor Endpoint', function () {
                         expect(container.logs).to.have.length.of.at.least(1);
                     });
                 });
+
+                done();
+            });
+    });
+
+    it('should return failure when product is not found', function (done) {
+        request(server)
+            .get(`/harbor/${barge}/missing-shipment/${environment}`)
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                }
+
+                let obj = res.body;
+
+                expect(obj.replicas).to.have.length.of(0);
+                expect(obj.msg).to.equal('Could not find Product')
+                expect(obj.error).to.be.true;
 
                 done();
             });
