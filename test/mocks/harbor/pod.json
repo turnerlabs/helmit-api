@@ -10,6 +10,55 @@
       "metadata": {},
       "spec": {},
       "status": {
+        "phase": "Pending",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "False",
+            "lastProbeTime": null,
+            "lastTransitionTime": "2016-08-26T16:40:23Z",
+            "reason": "ContainersNotReady",
+            "message": "containers with unready status: [hello-world]"
+          }
+        ],
+        "hostIP": "10.61.5.110",
+        "startTime": "2016-08-26T16:40:23Z",
+        "containerStatuses": [
+          {
+            "name": "hello-world",
+            "state": {
+              "waiting": {
+                "reason": "ContainerCreating",
+                "message": "Image: registry.services.example.com/hello-world:1.7.3 is ready, container is creating"
+              }
+            },
+            "lastState": {},
+            "ready": false,
+            "restartCount": 0,
+            "image": "registry.services.example.com/hello-world:1.7.3",
+            "imageID": ""
+          },
+          {
+            "name": "foobar",
+            "state": {
+              "waiting": {
+                "reason": "ContainerCreating",
+                "message": "Image: registry.services.example.com/foobar:2.0.1 is ready, container is creating"
+              }
+            },
+            "lastState": {},
+            "ready": false,
+            "restartCount": 0,
+            "image": "registry.services.example.com/foobar:2.0.1",
+            "imageID": ""
+          }
+        ]
+      }
+    },
+    {
+      "metadata": {},
+      "spec": {},
+      "status": {
         "phase": "Running",
         "conditions": [
           {
