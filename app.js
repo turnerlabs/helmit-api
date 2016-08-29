@@ -16,6 +16,9 @@ const handlers = require('./lib/handlers'),
 let port = process.env.PORT || 5061,
     app = express();
 
+app.set('x-powered-by', false);
+app.set('etag', false);
+
 app.use(cors());
 app.use(handlers.contentJson);
 
@@ -45,6 +48,8 @@ app.get('/harbor/:barge/:shipment/:environment',
     k8sClient.getPods,
     containers.getLogs
 );
+
+app.use(handlers.errors);
 
 let server = app.listen(port, () => {
     debug('listening on %s', port)
