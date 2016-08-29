@@ -1,6 +1,6 @@
 {
   "name": "helmit-api",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Gain insight into Shipments running on a Barge within Harbor.",
   "main": "app.js",
   "scripts": {
