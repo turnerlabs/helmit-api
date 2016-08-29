@@ -118,7 +118,7 @@ describe('Harbor Endpoint', function () {
         request(server)
             .get(`/harbor/${barge}/missing-shipment/${environment}`)
             .expect('Content-Type', /json/)
-            .expect(404)
+            .expect(200)
             .end((err, res) => {
                 if (err) {
                     done(err);
@@ -128,7 +128,7 @@ describe('Harbor Endpoint', function () {
 
                 expect(obj.replicas).to.have.length.of(0);
                 expect(obj.msg).to.equal('Could not find Product')
-                expect(obj.error).to.be.true;
+                expect(obj.error).to.be.false;
 
                 done();
             });
