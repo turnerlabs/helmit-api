@@ -291,3 +291,32 @@ describe('Shipment Events', function () {
             });
     });
 });
+
+describe('Barge', function () {
+    let barge = 'missing',
+        shipment = 'hello-world-app',
+        environment = 'dev',
+        location = 'ec2',
+        shipmentEventsPath = '/api/v1/namespaces/$NAMESPACE/events';
+
+    beforeEach(function () {
+        nock(idbHost)
+            .get(idbPath.replace('$PRODUCT', `${barge}-barge-api`).replace('$ENVIRONMENT', 'prod').replace('$LOCATION', location))
+            .replyWithFile(200, getMockData('missing-barge'));
+
+        nock(mssBargeApi)
+            .get(shipmentEventsPath.replace('$NAMESPACE', `${shipment}-${environment}`))
+            .replyWithFile(200, getMockData('shipment-events/events'));
+
+        nock(mssBargeApi)
+            .get(shipmentEventsPath.replace('$NAMESPACE', `empty-shipment-${environment}`))
+            .replyWithFile(200, getMockData('shipment-events/events-empty'));
+    });
+
+    it('should fail when barge is missing', function (done) {
+        request(server)
+            .get(`/shipment/events/${barge}/${shipment}/${environment}`)
+            .expect('Content-Type', /json/)
+            .expect(500, done);
+    });
+});
