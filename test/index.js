@@ -288,7 +288,7 @@ describe('Barge', function () {
             .replyWithFile(200, getMockData('shipment-events/events-empty'));
     });
 
-    it('should failing when barge is missing', function (done) {
+    it('should fail when barge is missing', function (done) {
         request(server)
             .get(`/shipment/events/${barge}/${shipment}/${environment}`)
             .expect('Content-Type', /json/)
