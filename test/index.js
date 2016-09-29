@@ -89,8 +89,8 @@ describe('Harbor Endpoint', function () {
 
                 let obj = res.body,
                     required = ['error', 'replicas'],
-                    reqReplicas = ['host', 'provider', 'containers'],
-                    reqContainers = ['name', 'id', 'image', 'log_stream', 'logs'];
+                    reqReplicas = ['host', 'provider', 'containers', 'phase', 'name'],
+                    reqContainers = ['name', 'id', 'image', 'log_stream', 'logs', 'state'];
 
                 required.forEach(prop => expect(obj).to.have.property(prop));
 
@@ -106,7 +106,7 @@ describe('Harbor Endpoint', function () {
                         reqContainers.forEach(prop => expect(container).to.have.property(prop))
 
                         // logs
-                        expect(container.logs).to.have.length.of.at.least(1);
+                        expect(container.logs).to.be.instanceof(Array);
                     });
                 });
 
