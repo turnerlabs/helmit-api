@@ -7,7 +7,23 @@
   },
   "items": [
     {
-      "metadata": {},
+      "metadata": {
+        "name": "rc12345-mmekv",
+        "generateName": "rc12345-",
+        "namespace": "hello-world-app-dev",
+        "selfLink": "/api/v1/namespaces/hello-world-app-dev/pods/rc12345-mmekv",
+        "uid": "1282f9cb-540d-11e6-919c-0e858d9df4bb",
+        "resourceVersion": "247828885",
+        "creationTimestamp": "2016-07-27T15:16:20Z",
+        "labels": {
+          "environment": "dev",
+          "name": "hello-world-app",
+          "version": "1469632580230549201"
+        },
+        "annotations": {
+          "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicationController\",\"namespace\":\"hello-world-app-dev\",\"name\":\"rc12345\",\"uid\":\"1281673e-540d-11e6-919c-0e858d9df4bb\",\"apiVersion\":\"v1\",\"resourceVersion\":\"247828726\"}}\n"
+        }
+      },
       "spec": {},
       "status": {
         "phase": "Pending",
@@ -56,7 +72,23 @@
       }
     },
     {
-      "metadata": {},
+      "metadata": {
+        "name": "rc12345-mmekv",
+        "generateName": "rc12345-",
+        "namespace": "hello-world-app-dev",
+        "selfLink": "/api/v1/namespaces/hello-world-app-dev/pods/rc12345-mmekv",
+        "uid": "1282f9cb-540d-11e6-919c-0e858d9df4bb",
+        "resourceVersion": "247828885",
+        "creationTimestamp": "2016-07-27T15:16:20Z",
+        "labels": {
+          "environment": "dev",
+          "name": "hello-world-app",
+          "version": "1469632580230549201"
+        },
+        "annotations": {
+          "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicationController\",\"namespace\":\"hello-world-app-dev\",\"name\":\"rc12345\",\"uid\":\"1281673e-540d-11e6-919c-0e858d9df4bb\",\"apiVersion\":\"v1\",\"resourceVersion\":\"247828726\"}}\n"
+        }
+      },
       "spec": {},
       "status": {
         "phase": "Running",
@@ -104,7 +136,23 @@
       }
     },
     {
-      "metadata": {},
+      "metadata": {
+        "name": "rc12345-mmekv",
+        "generateName": "rc12345-",
+        "namespace": "hello-world-app-dev",
+        "selfLink": "/api/v1/namespaces/hello-world-app-dev/pods/rc12345-mmekv",
+        "uid": "1282f9cb-540d-11e6-919c-0e858d9df4bb",
+        "resourceVersion": "247828885",
+        "creationTimestamp": "2016-07-27T15:16:20Z",
+        "labels": {
+          "environment": "dev",
+          "name": "hello-world-app",
+          "version": "1469632580230549201"
+        },
+        "annotations": {
+          "kubernetes.io/created-by": "{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicationController\",\"namespace\":\"hello-world-app-dev\",\"name\":\"rc12345\",\"uid\":\"1281673e-540d-11e6-919c-0e858d9df4bb\",\"apiVersion\":\"v1\",\"resourceVersion\":\"247828726\"}}\n"
+        }
+      },
       "spec": {},
       "status": {
         "phase": "Running",
