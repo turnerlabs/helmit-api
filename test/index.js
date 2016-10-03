@@ -90,7 +90,8 @@ describe('Harbor Endpoint', function () {
                 let obj = res.body,
                     required = ['error', 'replicas'],
                     reqReplicas = ['host', 'provider', 'containers', 'phase', 'name'],
-                    reqContainers = ['name', 'id', 'image', 'log_stream', 'logs', 'state'];
+                    reqRunningContainers = ['name', 'id', 'image', 'log_stream', 'logs', 'state', 'restartCount'],
+                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'];
 
                 required.forEach(prop => expect(obj).to.have.property(prop));
 
@@ -102,11 +103,15 @@ describe('Harbor Endpoint', function () {
 
                     // containers
                     expect(replica.containers).to.have.length.of.at.least(1);
-                    replica.containers.forEach(container => {
-                        reqContainers.forEach(prop => expect(container).to.have.property(prop))
+                    // running container
+                    replica.containers.filter(container => container.phase === 'running').forEach(container => {
+                        reqRunningContainers.forEach(prop => expect(container).to.have.property(prop))
 
                         // logs
                         expect(container.logs).to.be.instanceof(Array);
+                    });
+                    replica.containers.filter(container => container.phase !== 'running').forEach(container => {
+                        reqNonRunningContainers.forEach(prop => expect(container).to.have.property(prop))
                     });
                 });
 
@@ -173,7 +178,7 @@ describe('Shipment Status', function () {
                 let obj = res.body,
                     required = ['averageRestarts', 'status', 'namespace', 'version'],
                     reqStatus = ['conditions', 'containers', 'phase'],
-                    reqContainers = ['image', 'ready', 'restarts', 'state', 'status'];
+                    reqContainers = ['id', 'image', 'ready', 'restarts', 'state', 'status'];
 
                 required.forEach(prop => expect(obj).to.have.property(prop));
                 reqStatus.forEach(prop => expect(obj.status).to.have.property(prop));
