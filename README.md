@@ -23,6 +23,7 @@ An API which gives insight to running containers.
 ## Contributing
 
 Develop [![CircleCI](https://circleci.com/gh/turnerlabs/helmit-api/tree/master.svg?style=svg)](https://circleci.com/gh/turnerlabs/helmit-api/tree/develop)
+
 This repository uses [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/). All new
 features should branch off of `develop` and all pull requests should be back into `develop`. Version
 bumps will occur when the feature is merged into master.
