@@ -1,6 +1,6 @@
 {
   "name": "helmit-api",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Gain insight into Shipments running on a Barge within Harbor.",
   "main": "app.js",
   "scripts": {
@@ -23,7 +23,8 @@
     "email": "wilson.wise@turner.com"
   },
   "engines": {
-    "node": "4.4.7"
+    "node": "4.4.7",
+    "npm": "2.15.8"
   },
   "license": "Apache-2.0",
   "bugs": {
