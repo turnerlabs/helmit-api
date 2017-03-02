@@ -1,0 +1,36 @@
+machine:
+  node:
+    version: 4.4.7
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+  services:
+    - docker
+  
+dependencies:
+  pre:
+    - npm install
+    - npm test
+  override:
+    - docker version
+    - docker info
+    - docker login -e="${DOCKER_EMAIL}" -u="${DOCKER_USER}" -p="${DOCKER_PASSWORD}" quay.io
+    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
+      -s "mss-helmit-api" \
+      -t "${SHIPMENT_BUILD_TOKEN}" \
+      -e "dev" \
+      -b "${CIRCLE_BRANCH}" \
+      -n "${CIRCLE_BUILD_NUM}" > props;
+    - source props; docker build -t "${IMAGE}" .
+    - source props; docker push "${IMAGE}"
+    - source props; docker run -it --env-file props quay.io/turner/harbor-deploy catalog
+      
+deployment:
+  staging:
+    branch: [develop]
+    commands:
+      - source props; docker run -it --env-file props quay.io/turner/harbor-deploy deploy
+    branch: [master]
+    commands:
+      - source props; docker run -it --env-file props quay.io/turner/harbor-deploy deploy
+      - source props; docker tag "${IMAGE}" "${LATEST}"
+      - source props; docker push "${LATEST}"
