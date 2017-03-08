@@ -264,7 +264,7 @@ describe('Shipment Events', function () {
                 }
 
                 let obj = res.body,
-                    required = ['type', 'count', 'reason', 'message', 'source'];
+                    required = ['type', 'count', 'reason', 'message', 'source', 'firstTimestamp', 'lastTimestamp'];
 
                 expect(obj.namespace).to.equal('hello-world-app-dev');
                 expect(obj.events).to.have.length.of.at.least(1);
