@@ -178,7 +178,7 @@ describe('Shipment Status', function () {
                 let obj = res.body,
                     required = ['averageRestarts', 'status', 'namespace', 'version'],
                     reqStatus = ['conditions', 'containers', 'phase'],
-                    reqContainers = ['host', 'id', 'image', 'ready', 'replica', 'restarts', 'state', 'status'];
+                    reqContainers = ['host', 'id', 'image', 'ready', 'replica', 'restarts', 'podIp', 'state', 'status'];
 
                 required.forEach(prop => expect(obj).to.have.property(prop));
                 reqStatus.forEach(prop => expect(obj.status).to.have.property(prop));
