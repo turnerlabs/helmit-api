@@ -1,0 +1,7 @@
+shipments:
+  mss-helmit-api:
+    env: dev
+    barge: mss
+    containers:
+    - helmit-api
+    replicas: 8
