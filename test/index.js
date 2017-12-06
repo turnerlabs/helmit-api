@@ -37,8 +37,10 @@ describe('Harbor Endpoint', function () {
     let barge = 'mss',
         shipment = 'foobar-app',
         environment = 'dev',
+        namespace = `${shipment}-${environment}`,
         location = 'ec2',
         shipmentStatusPath = '/api/v1/namespaces/$NAMESPACE/pods',
+        k8sLogsPath = '/api/v1/namespaces/$NAMESPACE/pods/rc12345-mmekv/log',
         containerPath = '/containers/$ID/logs',
         host1 = 'http://172.0.0.1:4545',
         host2 = 'http://172.0.0.2:4545';
@@ -49,32 +51,56 @@ describe('Harbor Endpoint', function () {
             .replyWithFile(200, getMockData('barge-discover'));
 
         nock(mssBargeApi)
-            .get(shipmentStatusPath.replace('$NAMESPACE', `${shipment}-${environment}`))
+            .get(shipmentStatusPath.replace('$NAMESPACE', namespace))
             .replyWithFile(200, getMockData('harbor/pod'));
 
         nock(mssBargeApi)
             .get(shipmentStatusPath.replace('$NAMESPACE', `missing-shipment-${environment}`))
             .replyWithFile(200, getMockData('harbor/missing'));
 
+        //docker logs
         nock(host1)
             .get(containerPath.replace('$ID', 'd92a1'))
-            .query({stdout: 1, stderr: 1, timestamps: 1, tail: 500})
+            .query({ stdout: 1, stderr: 1, timestamps: 1, tail: 500 })
             .reply(200, getTextFile('harbor/host1-container1'));
 
         nock(host1)
             .get(containerPath.replace('$ID', 'd69a1'))
-            .query({stdout: 1, stderr: 1, timestamps: 1, tail: 500})
+            .query({ stdout: 1, stderr: 1, timestamps: 1, tail: 500 })
             .reply(200, getTextFile('harbor/host1-container2'));
 
         nock(host2)
             .get(containerPath.replace('$ID', 'd92a2'))
-            .query({stdout: 1, stderr: 1, timestamps: 1, tail: 500})
+            .query({ stdout: 1, stderr: 1, timestamps: 1, tail: 500 })
             .reply(200, getTextFile('harbor/host2-container1'));
 
         nock(host2)
             .get(containerPath.replace('$ID', 'd69a2'))
-            .query({stdout: 1, stderr: 1, timestamps: 1, tail: 500})
+            .query({ stdout: 1, stderr: 1, timestamps: 1, tail: 500 })
             .reply(200, getTextFile('harbor/host2-container2'));
+
+        //mock k8s container logs
+        let k8sLogs = k8sLogsPath.replace('$NAMESPACE', namespace);
+
+        nock(mssBargeApi)
+            .get(k8sLogs)
+            .query({ container: 'hello-world', timestamps: true, tailLines: 500 })
+            .reply(200, getTextFile('harbor/host1-container1'));
+
+        nock(mssBargeApi)
+            .get(k8sLogs)
+            .query({ container: 'foobar', timestamps: true, tailLines: 500 })
+            .reply(200, getTextFile('harbor/host1-container1'));
+
+        nock(mssBargeApi)
+            .get(k8sLogs)
+            .query({ container: 'hello-world', timestamps: true, tailLines: 500 })
+            .reply(200, getTextFile('harbor/host1-container1'));
+
+        nock(mssBargeApi)
+            .get(k8sLogs)
+            .query({ container: 'foobar', timestamps: true, tailLines: 500 })
+            .reply(200, getTextFile('harbor/host1-container1'));
     });
 
     it('should return a json object with data for Harbor UI', function (done) {
@@ -104,17 +130,41 @@ describe('Harbor Endpoint', function () {
                     // containers
                     expect(replica.containers).to.have.length.of.at.least(1);
                     // running container
-                    replica.containers.filter(container => container.phase === 'running').forEach(container => {
+                    replica.containers.filter(container => container.state === 'running').forEach(container => {
                         reqRunningContainers.forEach(prop => expect(container).to.have.property(prop))
 
                         // logs
                         expect(container.logs).to.be.instanceof(Array);
                     });
-                    replica.containers.filter(container => container.phase !== 'running').forEach(container => {
+
+                    replica.containers.filter(container => container.state !== 'running').forEach(container => {
                         reqNonRunningContainers.forEach(prop => expect(container).to.have.property(prop))
                     });
                 });
 
+                done();
+            });
+    });
+
+    it('should return a 400 for non-argo managed barges', function (done) {
+
+        //simulate non-argo managed barge by adding envvars for this barge
+        process.env['MSS_ENDPOINT'] = mssBargeApi;
+        process.env['MSS_TOKEN'] = 'xyz';
+
+        request(server)
+            .get(`/harbor/${barge}/${shipment}/${environment}`)
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end((err, res) => {
+                if (err) done(err);
+
+                console.log(res.body);
+                expect(res.body.error).to.equal(true);
+                expect(res.body.message).to.contain('not supported on barge');
+
+                delete process.env['MSS_ENDPOINT'];
+                delete process.env['MSS_TOKEN'];
                 done();
             });
     });
@@ -130,10 +180,96 @@ describe('Harbor Endpoint', function () {
                 }
 
                 let obj = res.body;
+                console.log(obj);
 
                 expect(obj.replicas).to.have.length.of(0);
                 expect(obj.msg).to.equal('Could not find Product')
                 expect(obj.error).to.be.false;
+
+                done();
+            });
+    });
+
+    it('v2/harbor should return a json object without logs', function (done) {
+        request(server)
+            .get(`/v2/harbor/${barge}/${shipment}/${environment}`)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                }
+
+                let obj = res.body,
+                    required = ['error', 'replicas'],
+                    reqReplicas = ['host', 'provider', 'containers', 'phase', 'name'],
+                    reqRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'],
+                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'];
+
+                required.forEach(prop => expect(obj).to.have.property(prop));
+
+                // replicas
+                expect(obj.replicas).to.have.length.of.at.least(1);
+                expect(obj.error).to.be.false;
+                obj.replicas.forEach(replica => {
+                    reqReplicas.forEach(prop => expect(replica).to.have.property(prop))
+
+                    // containers
+                    expect(replica.containers).to.have.length.of.at.least(1);
+
+                    // running container
+                    replica.containers.filter(container => container.state === 'running').forEach(container => {
+                        reqRunningContainers.forEach(prop => expect(container).to.have.property(prop))
+                    });
+
+                    replica.containers.filter(container => container.state !== 'running').forEach(container => {
+                        reqNonRunningContainers.forEach(prop => expect(container).to.have.property(prop))
+                    });
+                });
+
+                done();
+            });
+    });
+
+    it('v2/harbor/logs should return a json object with logs', function (done) {
+        request(server)
+            .get(`/v2/harbor/logs/${barge}/${shipment}/${environment}`)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                }
+
+                let obj = res.body,
+                    required = ['error', 'replicas'],
+                    reqReplicas = ['host', 'provider', 'containers', 'phase', 'name'],
+                    reqRunningContainers = ['name', 'id', 'image', 'logs', 'state', 'restartCount'],
+                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'];
+
+                required.forEach(prop => expect(obj).to.have.property(prop));
+
+                // replicas
+                expect(obj.replicas).to.have.length.of.at.least(1);
+                expect(obj.error).to.be.false;
+                obj.replicas.forEach(replica => {
+                    reqReplicas.forEach(prop => expect(replica).to.have.property(prop))
+
+                    // containers
+                    expect(replica.containers).to.have.length.of.at.least(1);
+
+                    // running container
+                    replica.containers.filter(container => container.state === 'running').forEach(container => {
+                        reqRunningContainers.forEach(prop => expect(container).to.have.property(prop));
+
+                        // logs
+                        expect(container.logs).to.be.instanceof(Array);
+                    });
+
+                    replica.containers.filter(container => container.state !== 'running').forEach(container => {
+                        reqNonRunningContainers.forEach(prop => expect(container).to.have.property(prop))
+                    });
+                });
 
                 done();
             });
