@@ -41,7 +41,31 @@ app.get('/shipment/events/:barge/:shipment/:environment',
     k8sClient.podEvents
 );
 
+/* /v2/harbor/:barge/:shipment/:environment
+   returns info about a shipment environment's pod replicas
+   excluding logs
+*/
+app.get('/v2/harbor/:barge/:shipment/:environment',
+    barge.discover,
+    k8sClient.getPods,
+    k8sClient.podReplicas
+);
+
+/* /v2/harbor/:barge/:shipment/:environment
+   returns info about a shipment environment's pod replicas
+   including logs (from k8s)
+*/
+app.get('/v2/harbor/logs/:barge/:shipment/:environment',
+    barge.discover,
+    k8sClient.getPods,
+    k8sClient.getLogs,
+    k8sClient.podReplicas
+);
+
 /* /harbor/:customer/:shipment/:environment
+   returns info about a shipment environment's pod replicas
+   including container logs (from docker)
+   note: doesn't work on managed k8s barges
 */
 app.get('/harbor/:barge/:shipment/:environment',
     barge.discover,
@@ -49,7 +73,10 @@ app.get('/harbor/:barge/:shipment/:environment',
     containers.getLogs
 );
 
-app.use(handlers.errors);
+//disable error handler when debugging
+if (!process.env.DEBUG) {
+    app.use(handlers.errors);
+}
 
 let server = app.listen(port, () => {
     debug('listening on %s', port)
