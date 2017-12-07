@@ -11,8 +11,13 @@ jobs:
       - setup_remote_docker:
           version: 17.06.0-ce
       - run:
-          name: Set image version/tag
-          command: echo "VERSION=$(jq -r .version < package.json)-${CIRCLE_BRANCH}.${CIRCLE_BUILD_NUM}" > .env
+          name: Set image version/tag (e.g., 1.1.0-42 for master else 1.1.0-develop.42)
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "VERSION=$(jq -r .version < package.json)-${CIRCLE_BUILD_NUM}" > .env
+            else
+              echo "VERSION=$(jq -r .version < package.json)-${CIRCLE_BRANCH}.${CIRCLE_BUILD_NUM}" > .env
+            fi
       - run:
           name: Build app image
           command: docker-compose -f ${FILE} build
