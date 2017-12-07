@@ -31,6 +31,6 @@ jobs:
       - run:
           name: Deploy develop and master branches to the dev environment
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "develop" ] then
-              harbor-compose -f ${FILE} develop
+            if [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              harbor-compose -f ${FILE} deploy;
             fi
