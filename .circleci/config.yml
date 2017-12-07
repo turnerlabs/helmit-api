@@ -5,6 +5,7 @@ jobs:
       - image: quay.io/turner/harbor-cicd-image:v0.15.0
     environment:
       - FILE: .circleci/docker-compose.yml
+      - MSS_HELMIT_API_DEV_TOKEN: ${SHIPMENT_BUILD_TOKEN}
     working_directory: ~/app
     steps:
       - checkout
