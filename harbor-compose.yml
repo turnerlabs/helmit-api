@@ -1,7 +1,7 @@
 shipments:
   mss-helmit-api:
     env: dev
-    barge: mss
+    barge: sports-prod
     containers:
     - helmit-api
     replicas: 8
