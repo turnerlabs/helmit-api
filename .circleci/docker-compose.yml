@@ -1,0 +1,5 @@
+version: "2"
+services:
+  helmit-api:
+    build: ../
+    image: quay.io/turner/helmit-api:${VERSION}

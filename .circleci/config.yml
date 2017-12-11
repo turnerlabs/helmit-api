@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: quay.io/turner/harbor-cicd-image:v0.15.0
+    environment:
+      - FILE: .circleci/docker-compose.yml
+    working_directory: ~/app
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 17.06.0-ce
+      - run:
+          name: Set image version/tag (e.g., 1.1.0-42 for master else 1.1.0-develop.42)
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "VERSION=$(jq -r .version < package.json)-${CIRCLE_BUILD_NUM}" > .env
+            else
+              echo "VERSION=$(jq -r .version < package.json)-${CIRCLE_BRANCH}.${CIRCLE_BUILD_NUM}" > .env
+            fi
+      - run:
+          name: Build app image
+          command: docker-compose -f ${FILE} build
+      - run:
+          name: test app image
+          command: docker-compose -f ${FILE} run helmit-api npm test
+      - run:        
+          name: Login to registry
+          command: docker login -u="${DOCKER_USER}" -p="${DOCKER_PASSWORD}" quay.io
+      - run:
+          name: Push app image to registry
+          command: docker-compose -f ${FILE} push
+      - run:
+          name: Catalog all branches
+          command: harbor-compose -f ${FILE} catalog
+      - run:
+          name: Deploy develop and master branches to the dev environment
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              harbor-compose -f ${FILE} deploy;
+            fi
