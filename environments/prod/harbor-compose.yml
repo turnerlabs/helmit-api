@@ -1,0 +1,14 @@
+shipments:
+  mss-helmit-api:
+    env: prod
+    barge: mss
+    containers:
+    - helmit-api
+    replicas: 8
+    group: ops
+    property: dmtio.net
+    project: helmit
+    product: mss-helmit-api
+    enableMonitoring: true
+    healthcheckTimeoutSeconds: 1
+    healthcheckIntervalSeconds: 10

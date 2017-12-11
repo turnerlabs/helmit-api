@@ -1,0 +1,13 @@
+version: "2"
+services:
+  helmit-api:
+    image: quay.io/turner/helmit-api:1.1.0-master.35
+    ports:
+    - 80:12611
+    - 443:12611
+    environment:
+      HEALTHCHECK: /_hc
+      NODE_ENV: production
+      PORT: "12611"
+    env_file:
+    - hidden.env
