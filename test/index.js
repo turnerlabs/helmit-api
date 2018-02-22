@@ -116,8 +116,8 @@ describe('Harbor Endpoint', function () {
                 let obj = res.body,
                     required = ['error', 'replicas'],
                     reqReplicas = ['host', 'provider', 'containers', 'phase', 'name'],
-                    reqRunningContainers = ['name', 'id', 'image', 'log_stream', 'logs', 'state', 'restartCount'],
-                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'];
+                    reqRunningContainers = ['name', 'id', 'image', 'log_stream', 'logs', 'state', 'restartCount', 'lastState'],
+                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount', 'lastState'];
 
                 required.forEach(prop => expect(obj).to.have.property(prop));
 
@@ -203,8 +203,8 @@ describe('Harbor Endpoint', function () {
                 let obj = res.body,
                     required = ['error', 'replicas'],
                     reqReplicas = ['host', 'provider', 'containers', 'phase', 'name'],
-                    reqRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'],
-                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'];
+                    reqRunningContainers = ['name', 'id', 'image', 'state', 'restartCount', 'lastState'],
+                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount', 'lastState'];
 
                 required.forEach(prop => expect(obj).to.have.property(prop));
 
@@ -244,8 +244,8 @@ describe('Harbor Endpoint', function () {
                 let obj = res.body,
                     required = ['error', 'replicas'],
                     reqReplicas = ['host', 'provider', 'containers', 'phase', 'name'],
-                    reqRunningContainers = ['name', 'id', 'image', 'logs', 'state', 'restartCount'],
-                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount'];
+                    reqRunningContainers = ['name', 'id', 'image', 'logs', 'state', 'restartCount', 'lastState'],
+                    reqNonRunningContainers = ['name', 'id', 'image', 'state', 'restartCount', 'lastState'];
 
                 required.forEach(prop => expect(obj).to.have.property(prop));
 
